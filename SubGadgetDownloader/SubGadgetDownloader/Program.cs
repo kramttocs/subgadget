@@ -24,7 +24,9 @@ namespace SubGadgetDownloader
                     Console.WriteLine("--------------------------");
                     Console.WriteLine("Downloading track: "+ fileName);                    
                     byte[] buffer = new byte[4096];
-                    WebRequest wr = WebRequest.Create(downloadURL);
+                    HttpWebRequest wr = (HttpWebRequest) WebRequest.Create(downloadURL);
+                    //set the timeout to 30 minutes
+                    wr.Timeout = 1800000;
                     string usernamePassword = username + ":" + password;
                     CredentialCache mycache = new CredentialCache();
                     mycache.Add(new Uri(downloadURL), "Basic", new NetworkCredential(username, password));
