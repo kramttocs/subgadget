@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
+using System.Xml;
 
 namespace SubGadgetDownloader
 {
@@ -15,12 +16,17 @@ namespace SubGadgetDownloader
             {                
                 try
                 {
+                    double currentVersion = 1.1;
                     string downloadURL = args[0];
                     string username = args[1];
                     string password = args[2];
                     string fileName = args[3];
                     string location = args[4];
                     Console.WriteLine("SubGadget Downloader");
+                    Console.WriteLine("--------------------------");
+                    Console.WriteLine("Version: "+currentVersion.ToString());
+                    Console.WriteLine(checkVersion(currentVersion));                    
+                    Console.WriteLine("--------------------------");
                     Console.WriteLine("--------------------------");
                     Console.WriteLine("Downloading track: "+ fileName);                    
                     byte[] buffer = new byte[4096];
@@ -72,6 +78,27 @@ namespace SubGadgetDownloader
                     Console.WriteLine("Press Enter to Exit");
                     Console.ReadLine();
                 }
+            }
+        }
+        public static string checkVersion(double currentVersion)
+        {
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load("http://subgadget.googlecode.com/svn/trunk/versions.xml");
+                double serverVersion = Convert.ToDouble(doc.GetElementsByTagName("currentDownloaderVersion")[0].InnerText);
+                if (serverVersion > currentVersion)
+                {
+                    return "+++"+serverVersion.ToString() + " update available! Please visit http://code.google.com/p/subgadget/ +++";
+                }
+                else
+                {
+                    return "Up to date";
+                }
+            }
+            catch (Exception e)
+            {
+                return "Unable to check for update";
             }
         }
     }
