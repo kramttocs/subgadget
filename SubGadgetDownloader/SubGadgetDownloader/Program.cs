@@ -5,23 +5,44 @@ using System.Text;
 using System.Net;
 using System.IO;
 using System.Xml;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace SubGadgetDownloader
 {
     class Program
     {
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
         static void Main(string[] args)
         {
             if (args.Length > 0)
-            {                
+            {
+                bool hidden = false;
                 try
-                {
-                    double currentVersion = 1.1;
+                {                   
+                    double currentVersion = 1.2;
                     string downloadURL = args[0];
                     string username = args[1];
                     string password = args[2];
                     string fileName = args[3];
                     string location = args[4];
+                    hidden = Convert.ToBoolean(args[5]);
+                    Console.Title = "SubGadget Downloader - "+fileName;
+                    if (hidden)
+                    {
+                        Console.WriteLine("Preparing to hide...");
+                        Thread.Sleep(1000);
+                        IntPtr theWindow = FindWindow(null, Console.Title);
+                        if (theWindow != IntPtr.Zero)
+                        {
+                            ShowWindow(theWindow, 0);
+                        }
+                    }
                     Console.WriteLine("SubGadget Downloader");
                     Console.WriteLine("--------------------------");
                     Console.WriteLine("Version: "+currentVersion.ToString());
@@ -71,12 +92,16 @@ namespace SubGadgetDownloader
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("--------------------------");
-                    Console.WriteLine("!!Error Downloading!!");
-                    Console.WriteLine("--------------------------");
-                    Console.WriteLine("Reason: " + e.ToString());
-                    Console.WriteLine("Press Enter to Exit");
-                    Console.ReadLine();
+                    if (!hidden)
+                    {
+                        Console.WriteLine("--------------------------");
+                        Console.WriteLine("!!Error Downloading!!");
+                        Console.WriteLine("--------------------------");
+                        Console.WriteLine("Reason: " + e.ToString());
+                        Console.WriteLine("Please update if a new version is available");
+                        Console.WriteLine("Press Enter to Exit");
+                        Console.ReadLine();
+                    }
                 }
             }
         }
