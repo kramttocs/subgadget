@@ -109,17 +109,29 @@ namespace SubGadgetDownloader
         {
             try
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load("http://subgadget.googlecode.com/svn/trunk/versions.xml");
-                double serverVersion = Convert.ToDouble(doc.GetElementsByTagName("currentDownloaderVersion")[0].InnerText);
-                if (serverVersion > currentVersion)
+                string xmlURL = "http://subgadget.googlecode.com/svn/trunk/versions.xml"; 
+                HttpWebRequest wr = (HttpWebRequest)WebRequest.Create(xmlURL);
+                wr.Timeout = 5000;
+                string status = "";
+                using (WebResponse response = wr.GetResponse())
                 {
-                    return "+++"+serverVersion.ToString() + " update available! Please visit http://code.google.com/p/subgadget/ +++";
+                   using (XmlReader reader = XmlReader.Create(response.GetResponseStream()))
+                    {
+                        while (reader.ReadToFollowing("currentDownloaderVersion"))
+                        {
+                            double serverVersion = Convert.ToDouble(reader.ReadElementContentAsString());                        
+                            if (serverVersion > currentVersion)
+                            {
+                                status = "+++" + serverVersion.ToString() + " update available! Please visit http://code.google.com/p/subgadget/ +++";
+                            }
+                            else
+                            {
+                                status = "Up to date";
+                            }
+                        }
+                    }
                 }
-                else
-                {
-                    return "Up to date";
-                }
+                return status;
             }
             catch (Exception e)
             {
