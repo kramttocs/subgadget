@@ -25,7 +25,7 @@ namespace SubGadgetDownloader
                 bool hidden = false;
                 try
                 {                   
-                    double currentVersion = 1.2;
+                    double currentVersion = 1.3D;
                     string downloadURL = args[0];
                     string username = args[1];
                     string password = args[2];
@@ -111,7 +111,7 @@ namespace SubGadgetDownloader
             {
                 string xmlURL = "http://subgadget.googlecode.com/svn/trunk/versions.xml"; 
                 HttpWebRequest wr = (HttpWebRequest)WebRequest.Create(xmlURL);
-                wr.Timeout = 5000;
+                wr.Timeout = 6000;
                 string status = "";
                 using (WebResponse response = wr.GetResponse())
                 {
@@ -119,7 +119,7 @@ namespace SubGadgetDownloader
                     {
                         while (reader.ReadToFollowing("currentDownloaderVersion"))
                         {
-                            double serverVersion = Convert.ToDouble(reader.ReadElementContentAsString());                        
+                            double serverVersion = reader.ReadElementContentAsDouble();                                                                               
                             if (serverVersion > currentVersion)
                             {
                                 status = "+++" + serverVersion.ToString() + " update available! Please visit http://code.google.com/p/subgadget/ +++";
