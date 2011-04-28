@@ -98,7 +98,7 @@ namespace SubGadgetDownloader
                         Console.WriteLine("!!Error Downloading!!");
                         Console.WriteLine("--------------------------");
                         //
-                        Console.WriteLine("Reason: " + e.ToString());
+                        //Console.WriteLine("Reason: " + e.ToString());
                         //
                         Console.WriteLine("Please update if a new version is available");
                         Console.WriteLine("Press Enter to Exit");
