@@ -76,11 +76,13 @@ namespace SubGadgetDownloader
                         {
                             using (FileStream FileStreamer = new FileStream(location + "\\" + fileName, System.IO.FileMode.Create))
                             {
+                                var progress = 0;
                                 do
                                 {
                                     iBytesRead = responseStream.Read(buffer, 0, 4096);
+                                    progress += iBytesRead;
                                     FileStreamer.Write(buffer, 0, iBytesRead);
-                                    Console.Write("\r{0:0.0%}", (iBytesRead) / (contentLengthHeader));
+                                    Console.Write("\r{0:0.0%}", (progress) / (contentLengthHeader));
                                 }
                                 while (iBytesRead != 0);
                             }
