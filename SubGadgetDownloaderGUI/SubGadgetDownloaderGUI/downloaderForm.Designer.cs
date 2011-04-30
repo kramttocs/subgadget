@@ -28,22 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(downloaderForm));
             this.progressBarTest = new System.Windows.Forms.ProgressBar();
             this.lblCurrentTrack = new System.Windows.Forms.Label();
-            this.lnkUpdate = new System.Windows.Forms.LinkLabel();
-            this.lblVersion = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lblTrackCountStatus = new System.Windows.Forms.Label();
             this.lstTracks = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.lblSaveTo = new System.Windows.Forms.Label();
+            this.lblVersion = new System.Windows.Forms.Label();
+            this.lblTrackCountStatus = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // progressBarTest
             // 
             this.progressBarTest.Location = new System.Drawing.Point(12, 24);
             this.progressBarTest.Name = "progressBarTest";
-            this.progressBarTest.Size = new System.Drawing.Size(320, 23);
+            this.progressBarTest.Size = new System.Drawing.Size(403, 23);
             this.progressBarTest.TabIndex = 0;
             // 
             // lblCurrentTrack
@@ -54,44 +54,6 @@
             this.lblCurrentTrack.Size = new System.Drawing.Size(0, 13);
             this.lblCurrentTrack.TabIndex = 2;
             // 
-            // lnkUpdate
-            // 
-            this.lnkUpdate.AutoSize = true;
-            this.lnkUpdate.Location = new System.Drawing.Point(247, 245);
-            this.lnkUpdate.Name = "lnkUpdate";
-            this.lnkUpdate.Size = new System.Drawing.Size(92, 13);
-            this.lnkUpdate.TabIndex = 3;
-            this.lnkUpdate.TabStop = true;
-            this.lnkUpdate.Text = "Update Available!";
-            this.lnkUpdate.Visible = false;
-            this.lnkUpdate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkUpdate_LinkClicked);
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.AutoSize = true;
-            this.lblVersion.Location = new System.Drawing.Point(269, 245);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(0, 13);
-            this.lblVersion.TabIndex = 4;
-            this.lblVersion.Visible = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 245);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(34, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Track:";
-            // 
-            // lblTrackCountStatus
-            // 
-            this.lblTrackCountStatus.AutoSize = true;
-            this.lblTrackCountStatus.Location = new System.Drawing.Point(43, 245);
-            this.lblTrackCountStatus.Name = "lblTrackCountStatus";
-            this.lblTrackCountStatus.Size = new System.Drawing.Size(0, 13);
-            this.lblTrackCountStatus.TabIndex = 6;
-            // 
             // lstTracks
             // 
             this.lstTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -101,7 +63,7 @@
             this.lstTracks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lstTracks.Location = new System.Drawing.Point(12, 53);
             this.lstTracks.Name = "lstTracks";
-            this.lstTracks.Size = new System.Drawing.Size(320, 189);
+            this.lstTracks.Size = new System.Drawing.Size(403, 189);
             this.lstTracks.TabIndex = 7;
             this.lstTracks.UseCompatibleStateImageBehavior = false;
             this.lstTracks.View = System.Windows.Forms.View.Details;
@@ -110,26 +72,52 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Track";
-            this.columnHeader1.Width = 193;
+            this.columnHeader1.Width = 272;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Status";
+            this.columnHeader2.Width = 105;
+            // 
+            // lblSaveTo
+            // 
+            this.lblSaveTo.AutoSize = true;
+            this.lblSaveTo.Location = new System.Drawing.Point(7, 244);
+            this.lblSaveTo.Name = "lblSaveTo";
+            this.lblSaveTo.Size = new System.Drawing.Size(0, 13);
+            this.lblSaveTo.TabIndex = 8;
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.Location = new System.Drawing.Point(396, 244);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(0, 13);
+            this.lblVersion.TabIndex = 9;
+            // 
+            // lblTrackCountStatus
+            // 
+            this.lblTrackCountStatus.AutoSize = true;
+            this.lblTrackCountStatus.Location = new System.Drawing.Point(375, 7);
+            this.lblTrackCountStatus.Name = "lblTrackCountStatus";
+            this.lblTrackCountStatus.Size = new System.Drawing.Size(0, 13);
+            this.lblTrackCountStatus.TabIndex = 10;
             // 
             // downloaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(342, 262);
-            this.Controls.Add(this.lstTracks);
+            this.ClientSize = new System.Drawing.Size(427, 263);
             this.Controls.Add(this.lblTrackCountStatus);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.lblVersion);
-            this.Controls.Add(this.lnkUpdate);
+            this.Controls.Add(this.lblSaveTo);
+            this.Controls.Add(this.lstTracks);
             this.Controls.Add(this.lblCurrentTrack);
             this.Controls.Add(this.progressBarTest);
             this.Font = new System.Drawing.Font("Calibri", 8.25F);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "downloaderForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "SubGadgetDownloader GUI";
             this.Load += new System.EventHandler(this.downloaderForm_Load);
             this.Shown += new System.EventHandler(this.downloaderForm_Shown);
@@ -142,13 +130,12 @@
 
         private System.Windows.Forms.ProgressBar progressBarTest;
         private System.Windows.Forms.Label lblCurrentTrack;
-        private System.Windows.Forms.LinkLabel lnkUpdate;
-        private System.Windows.Forms.Label lblVersion;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lblTrackCountStatus;
         private System.Windows.Forms.ListView lstTracks;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.Label lblSaveTo;
+        private System.Windows.Forms.Label lblVersion;
+        private System.Windows.Forms.Label lblTrackCountStatus;
     }
 }
 

@@ -18,43 +18,67 @@ namespace SubGadgetDownloaderGUI
         public downloaderForm()
         {
             InitializeComponent();
-        }        
+        }
+
+        private void downloaderForm_Load(object sender, EventArgs e)
+        {
+            double currentVersion = 1.0D;
+            lblVersion.Text = "v" + currentVersion.ToString();
+            //checkVersion(currentVersion, lnkUpdate, lblVersion);
+        }
 
         private void downloaderForm_Shown(object sender, EventArgs e)
         {            
-            string username;
-            string password;
-            string location;
-            string filePath;
             string[] args = Environment.GetCommandLineArgs();
-            username = args[1];
-            password = args[2];
-            filePath = args[3];
-            location = args[4];
-            XmlDocument doc = new XmlDocument();
-            doc.Load(filePath);
-            XmlNodeList nodeList = doc.SelectNodes("SubGadgetDownloader/tracks/track/id");
-            XmlNodeList nodeListName = doc.SelectNodes("SubGadgetDownloader/tracks/track/name");
-            int trackCount = 0;
-            string[] queue = new string[nodeList.Count];
-            foreach (XmlNode track in nodeList)
+            if (args.Length == 5)
             {
-                queue[trackCount] = track.InnerText.ToString();
-                ListViewItem trackItem = new ListViewItem(new []{nodeListName[trackCount].InnerText.ToString(),"Waiting..."});
-                lstTracks.Items.Add(trackItem);
-                trackCount++;
+                try
+                {
+                    string username = args[1];
+                    string password = args[2];
+                    string filePath = args[3];
+                    string location = args[4];
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(filePath);
+                    XmlNodeList nodeList = doc.SelectNodes("SubGadgetDownloader/tracks/track/id");
+                    XmlNodeList nodeListName = doc.SelectNodes("SubGadgetDownloader/tracks/track/name");
+                    int trackCount = 0;
+                    string[] queue = new string[nodeList.Count];
+                    foreach (XmlNode track in nodeList)
+                    {
+                        queue[trackCount] = track.InnerText.ToString();
+                        ListViewItem trackItem = new ListViewItem(new[] {nodeListName[trackCount].InnerText.ToString(), "Waiting..." });
+                        lstTracks.Items.Add(trackItem);
+                        trackCount++;
+                    }
+                    File.Delete(filePath);
+                    string locationTemp = location;
+                    if (locationTemp.Length > 50)
+                    {
+                        locationTemp = locationTemp.Substring(0, 47) + "...";
+                    }
+                    lblSaveTo.Text = "Saving To " + locationTemp;
+                    int count = 0;
+                    foreach (string downloadURL in queue)
+                    {
+                        count++;
+                        lblTrackCountStatus.Text = count + "/" + queue.Length.ToString();
+                        //lstTracks.EnsureVisible(count - 1);
+                        lstTracks.Items[count - 1].SubItems[1].Text = "Downloading...";
+                        downloadTrack(downloadURL, username, password, location, progressBarTest);
+                        lstTracks.Items[count - 1].SubItems[1].Text = "Complete";
+                    }
+                    lblCurrentTrack.Text = "Downloading Complete. Total: " + queue.Length.ToString() + " tracks.";
+                }
+                catch (Exception ex)
+                {
+                    Application.Exit();
+                }
             }
-            File.Delete(filePath);
-            int count = 0;
-            foreach (string downloadURL in queue)
+            else
             {
-                count++;
-                lblTrackCountStatus.Text = count + "/" + queue.Length.ToString();
-                lstTracks.Items[count - 1].SubItems[1].Text = "Downloading...";
-                downloadTrack(downloadURL, username, password, location, progressBarTest);
-                lstTracks.Items[count - 1].SubItems[1].Text = "Complete";                
+                Application.Exit();
             }
-            lblCurrentTrack.Text = "Downloading Complete. Total: "+ queue.Length.ToString() + " tracks.";
         }
 
         public void downloadTrack(string downloadURL, string username, string password, string location, ProgressBar trackProgressBar)
@@ -150,12 +174,6 @@ namespace SubGadgetDownloaderGUI
                 versionLabel.Visible = true;
                 updateLabel.Visible = false;
             }
-        }
-
-        private void downloaderForm_Load(object sender, EventArgs e)
-        {
-            double currentVersion = 1.0D;
-            checkVersion(currentVersion, lnkUpdate, lblVersion);
         }
 
         private void lnkUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
