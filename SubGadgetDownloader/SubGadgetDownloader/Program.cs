@@ -25,7 +25,7 @@ namespace SubGadgetDownloader
                 bool hidden = false;
                 try
                 {                   
-                    double currentVersion = 1.3D;
+                    double currentVersion = 1.4D;
                     string downloadURL = args[0];
                     string username = args[1];
                     string password = args[2];
@@ -50,7 +50,8 @@ namespace SubGadgetDownloader
                     Console.WriteLine("--------------------------");
                     Console.WriteLine("--------------------------");
                     Console.WriteLine("Downloading track: "+ fileName);                    
-                    byte[] buffer = new byte[4096];
+                    byte[] buffer = new byte[4096];                   
+                    int iBytesRead = 0;
                     HttpWebRequest wr = (HttpWebRequest) WebRequest.Create(downloadURL);
                     //set the timeout to 30 minutes
                     wr.Timeout = 1800000;
@@ -73,19 +74,15 @@ namespace SubGadgetDownloader
                         //get and save the response
                         using (Stream responseStream = response.GetResponseStream())
                         {
-                            using (MemoryStream memoryStream = new MemoryStream())
+                            using (FileStream FileStreamer = new FileStream(location + "\\" + fileName, System.IO.FileMode.Create))
                             {
-                                int count = 0;
                                 do
                                 {
-                                    count = responseStream.Read(buffer, 0, buffer.Length);
-                                    memoryStream.Write(buffer, 0, count);
-                                    Console.Write("\r{0:0.0%}",(memoryStream.Length) / (contentLengthHeader));
-                                } while (count != 0);
-                                FileStream outStream = File.OpenWrite(location + "\\" + fileName);
-                                memoryStream.WriteTo(outStream);
-                                outStream.Flush();
-                                outStream.Close();
+                                    iBytesRead = responseStream.Read(buffer, 0, 4096);
+                                    FileStreamer.Write(buffer, 0, iBytesRead);
+                                    Console.Write("\r{0:0.0%}", (iBytesRead) / (contentLengthHeader));
+                                }
+                                while (iBytesRead != 0);
                             }
                         }
                     }
