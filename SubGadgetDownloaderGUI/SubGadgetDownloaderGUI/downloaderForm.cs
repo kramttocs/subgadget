@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.IO;
 using System.Xml;
+using System.Diagnostics;
 
 namespace SubGadgetDownloaderGUI
 {
@@ -20,8 +21,7 @@ namespace SubGadgetDownloaderGUI
         }        
 
         private void downloaderForm_Shown(object sender, EventArgs e)
-        {
-            double currentVersion = 1.0D;
+        {            
             string username;
             string password;
             string location;
@@ -34,25 +34,33 @@ namespace SubGadgetDownloaderGUI
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
             XmlNodeList nodeList = doc.SelectNodes("SubGadgetDownloader/tracks/track/id");
+            XmlNodeList nodeListName = doc.SelectNodes("SubGadgetDownloader/tracks/track/name");
             int trackCount = 0;
             string[] queue = new string[nodeList.Count];
             foreach (XmlNode track in nodeList)
             {
                 queue[trackCount] = track.InnerText.ToString();
+                ListViewItem trackItem = new ListViewItem(new []{nodeListName[trackCount].InnerText.ToString(),"Waiting..."});
+                lstTracks.Items.Add(trackItem);
                 trackCount++;
             }
-            label1.Text = queue.Length.ToString();
             File.Delete(filePath);
+            int count = 0;
             foreach (string downloadURL in queue)
             {
+                count++;
+                lblTrackCountStatus.Text = count + "/" + queue.Length.ToString();
+                lstTracks.Items[count - 1].SubItems[1].Text = "Downloading...";
                 downloadTrack(downloadURL, username, password, location, progressBarTest);
+                lstTracks.Items[count - 1].SubItems[1].Text = "Complete";                
             }
+            lblCurrentTrack.Text = "Downloading Complete. Total: "+ queue.Length.ToString() + " tracks.";
         }
 
         public void downloadTrack(string downloadURL, string username, string password, string location, ProgressBar trackProgressBar)
         {
-            //try
-            //{
+            try
+            {
                 string fileName;
                 byte[] bBuffer = new byte[4096];
                 int iBytesRead = 0;                
@@ -70,6 +78,12 @@ namespace SubGadgetDownloaderGUI
                     string contentDispositionHeader = response.Headers["Content-Disposition"];
                     int indexOfFileName = contentDispositionHeader.IndexOf("filename") + 10;
                     fileName = contentDispositionHeader.Substring(indexOfFileName, (contentDispositionHeader.Length - 1) - indexOfFileName);
+                    var fileNameDisplay = fileName;
+                    if (fileNameDisplay.Length > 40)
+                    {
+                        fileNameDisplay = fileNameDisplay.Substring(0, 37) + "...";
+                    }
+                    lblCurrentTrack.Text = "Downloading: "+fileNameDisplay;
                     using (Stream responseStream = response.GetResponseStream())
                     {
                         trackProgressBar.Maximum = Convert.ToInt32(response.ContentLength);
@@ -94,13 +108,13 @@ namespace SubGadgetDownloaderGUI
                         }
                     }
                 }
-            /* }
-             catch (Exception e)
+             }
+             catch (Exception ex)
              {
                  
-             }*/
+             }
         }
-        public static string checkVersion(double currentVersion)
+        public static void checkVersion(double currentVersion, LinkLabel updateLabel, Label versionLabel)
         {
             try
             {
@@ -112,31 +126,51 @@ namespace SubGadgetDownloaderGUI
                 {
                     using (XmlReader reader = XmlReader.Create(response.GetResponseStream()))
                     {
-                        while (reader.ReadToFollowing("currentDownloaderVersion"))
+                        while (reader.ReadToFollowing("currentDownloaderGUIVersion"))
                         {
                             double serverVersion = reader.ReadElementContentAsDouble();
                             if (serverVersion > currentVersion)
                             {
-                                status = "+++" + serverVersion.ToString() + " update available! Please visit http://code.google.com/p/subgadget/ +++";
+                                updateLabel.Visible = true;
+                                versionLabel.Visible = false;
                             }
                             else
                             {
-                                status = "Up to date";
+                                versionLabel.Text = "Up to date (v" + currentVersion.ToString() + ")";
+                                versionLabel.Visible = true;
+                                updateLabel.Visible = false;
                             }
                         }
                     }
                 }
-                return status;
             }
             catch (Exception e)
             {
-                return "Unable to check for update";
+                versionLabel.Text = "Version: "+currentVersion.ToString();
+                versionLabel.Visible = true;
+                updateLabel.Visible = false;
             }
         }
 
         private void downloaderForm_Load(object sender, EventArgs e)
         {
+            double currentVersion = 1.0D;
+            checkVersion(currentVersion, lnkUpdate, lblVersion);
+        }
 
+        private void lnkUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                Process.Start("http://code.google.com/p/subgadget/");
+            }
+            catch (Exception ex) { }            
+        }
+
+        private void lstTracks_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            e.Cancel = true;
+            e.NewWidth = lstTracks.Columns[e.ColumnIndex].Width;
         }
 
         
