@@ -21,7 +21,7 @@ namespace SubGadgetDownloaderGUI
 
         private void downloaderForm_Shown(object sender, EventArgs e)
         {
-            double currentVersion = 1.3D;
+            double currentVersion = 1.0D;
             string username;
             string password;
             string location;
@@ -54,10 +54,8 @@ namespace SubGadgetDownloaderGUI
             //try
             //{
                 string fileName;
-                System.IO.FileStream FileStreamer;
-                byte[] bBuffer = new byte[1024];
-                int iBytesRead = 0;
-                
+                byte[] bBuffer = new byte[4096];
+                int iBytesRead = 0;                
                 HttpWebRequest wr = (HttpWebRequest)WebRequest.Create(downloadURL);
                 //set the timeout to 30 minutes
                 wr.Timeout = 1800000;
@@ -76,22 +74,24 @@ namespace SubGadgetDownloaderGUI
                     {
                         trackProgressBar.Maximum = Convert.ToInt32(response.ContentLength);
                         trackProgressBar.Value = 0;
-                        FileStreamer = new FileStream(location + "\\" + fileName, System.IO.FileMode.Create);
-                        do
+                        using (FileStream FileStreamer = new FileStream(location + "\\" + fileName, System.IO.FileMode.Create))
                         {
-                            iBytesRead = responseStream.Read(bBuffer, 0, 1024);
-                            FileStreamer.Write(bBuffer, 0, iBytesRead);
-                            if (trackProgressBar.Value + iBytesRead <= trackProgressBar.Maximum)
+                            do
                             {
-                                trackProgressBar.Value += iBytesRead;
-                                Application.DoEvents();
+                                iBytesRead = responseStream.Read(bBuffer, 0, 4096);
+                                FileStreamer.Write(bBuffer, 0, iBytesRead);
+                                if (trackProgressBar.Value + iBytesRead <= trackProgressBar.Maximum)
+                                {
+                                    trackProgressBar.Value += iBytesRead;
+                                    Application.DoEvents();
+                                }
+                                else
+                                {
+                                    trackProgressBar.Value = trackProgressBar.Maximum;
+                                }
                             }
-                            else
-                            {
-                                trackProgressBar.Value = trackProgressBar.Maximum;
-                            }
+                            while (iBytesRead != 0);
                         }
-                        while (iBytesRead != 0);
                     }
                 }
             /* }
