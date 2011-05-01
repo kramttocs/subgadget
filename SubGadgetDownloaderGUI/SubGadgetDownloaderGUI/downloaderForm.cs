@@ -23,6 +23,7 @@ namespace SubGadgetDownloaderGUI
         bool cancelDownload;
         FileStream FileStreamer;
         int successfullyDownloaded = 0;
+        string location;
 
         private void downloaderForm_Load(object sender, EventArgs e)
         {
@@ -41,7 +42,7 @@ namespace SubGadgetDownloaderGUI
                     string username = args[1];
                     string password = args[2];
                     string filePath = args[3];
-                    string location = args[4];
+                    location = args[4];
                     XmlDocument doc = new XmlDocument();
                     doc.Load(filePath);
                     XmlNodeList nodeList = doc.SelectNodes("SubGadgetDownloader/tracks/track/id");
@@ -61,7 +62,7 @@ namespace SubGadgetDownloaderGUI
                     {
                         locationTemp = locationTemp.Substring(0, 47) + "...";
                     }
-                    lblSaveTo.Text = "Saving To " + locationTemp;
+                    lnkSaveTo.Text = locationTemp;
                     int count = 0;
                     foreach (string downloadURL in queue)
                     {
@@ -72,6 +73,7 @@ namespace SubGadgetDownloaderGUI
                         downloadTrack(downloadURL, username, password, location, progressBarTest, count);                        
                     }
                     lblCurrentTrack.Text = "Downloading Complete. Total: " + successfullyDownloaded + " out of "+ queue.Length.ToString() + " tracks.";
+                    progressBarTest.Value = 0;
                 }
                 catch (Exception ex)
                 {
@@ -219,6 +221,17 @@ namespace SubGadgetDownloaderGUI
         private void downloaderForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             cancelDownload = true;
+        }
+
+        private void lnkSaveTo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process prc = new System.Diagnostics.Process();
+                prc.StartInfo.FileName = location;
+                prc.Start();
+            }
+            catch (Exception ex) { }
         }
 
         

@@ -37,6 +37,7 @@
             this.lblSaveTo = new System.Windows.Forms.Label();
             this.lblTrackCountStatus = new System.Windows.Forms.Label();
             this.btnCancelDownload = new System.Windows.Forms.Button();
+            this.lnkSaveTo = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // progressBarTest
@@ -84,8 +85,9 @@
             this.lblSaveTo.AutoSize = true;
             this.lblSaveTo.Location = new System.Drawing.Point(7, 244);
             this.lblSaveTo.Name = "lblSaveTo";
-            this.lblSaveTo.Size = new System.Drawing.Size(0, 13);
+            this.lblSaveTo.Size = new System.Drawing.Size(52, 13);
             this.lblSaveTo.TabIndex = 8;
+            this.lblSaveTo.Text = "Saving To:";
             // 
             // lblTrackCountStatus
             // 
@@ -105,11 +107,21 @@
             this.btnCancelDownload.UseVisualStyleBackColor = true;
             this.btnCancelDownload.Click += new System.EventHandler(this.btnCancelDownload_Click);
             // 
+            // lnkSaveTo
+            // 
+            this.lnkSaveTo.AutoSize = true;
+            this.lnkSaveTo.Location = new System.Drawing.Point(59, 244);
+            this.lnkSaveTo.Name = "lnkSaveTo";
+            this.lnkSaveTo.Size = new System.Drawing.Size(0, 13);
+            this.lnkSaveTo.TabIndex = 12;
+            this.lnkSaveTo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSaveTo_LinkClicked);
+            // 
             // downloaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(427, 263);
+            this.Controls.Add(this.lnkSaveTo);
             this.Controls.Add(this.btnCancelDownload);
             this.Controls.Add(this.lblTrackCountStatus);
             this.Controls.Add(this.lblSaveTo);
@@ -139,6 +151,7 @@
         private System.Windows.Forms.Label lblSaveTo;
         private System.Windows.Forms.Label lblTrackCountStatus;
         private System.Windows.Forms.Button btnCancelDownload;
+        private System.Windows.Forms.LinkLabel lnkSaveTo;
     }
 }
 
