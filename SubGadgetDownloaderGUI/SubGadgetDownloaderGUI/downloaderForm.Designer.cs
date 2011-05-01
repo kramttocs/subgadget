@@ -43,7 +43,7 @@
             // 
             this.progressBarTest.Location = new System.Drawing.Point(12, 24);
             this.progressBarTest.Name = "progressBarTest";
-            this.progressBarTest.Size = new System.Drawing.Size(377, 23);
+            this.progressBarTest.Size = new System.Drawing.Size(347, 23);
             this.progressBarTest.TabIndex = 0;
             // 
             // lblCurrentTrack
@@ -97,11 +97,11 @@
             // 
             // btnCancelDownload
             // 
-            this.btnCancelDownload.Location = new System.Drawing.Point(396, 24);
+            this.btnCancelDownload.Location = new System.Drawing.Point(365, 24);
             this.btnCancelDownload.Name = "btnCancelDownload";
-            this.btnCancelDownload.Size = new System.Drawing.Size(19, 23);
+            this.btnCancelDownload.Size = new System.Drawing.Size(50, 23);
             this.btnCancelDownload.TabIndex = 11;
-            this.btnCancelDownload.Text = "X";
+            this.btnCancelDownload.Text = "Cancel";
             this.btnCancelDownload.UseVisualStyleBackColor = true;
             this.btnCancelDownload.Click += new System.EventHandler(this.btnCancelDownload_Click);
             // 
