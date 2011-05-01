@@ -20,10 +20,14 @@ namespace SubGadgetDownloaderGUI
             InitializeComponent();
         }
 
+        bool cancelDownload;
+        FileStream FileStreamer;
+        int successfullyDownloaded = 0;
+
         private void downloaderForm_Load(object sender, EventArgs e)
         {
-            double currentVersion = 1.0D;
-            lblVersion.Text = "v" + currentVersion.ToString();
+            //double currentVersion = 1.0D;
+            //lblVersion.Text = "v" + currentVersion.ToString();
             //checkVersion(currentVersion, lnkUpdate, lblVersion);
         }
 
@@ -65,10 +69,9 @@ namespace SubGadgetDownloaderGUI
                         lblTrackCountStatus.Text = count + "/" + queue.Length.ToString();
                         //lstTracks.EnsureVisible(count - 1);
                         lstTracks.Items[count - 1].SubItems[1].Text = "Downloading...";
-                        downloadTrack(downloadURL, username, password, location, progressBarTest);
-                        lstTracks.Items[count - 1].SubItems[1].Text = "Complete";
+                        downloadTrack(downloadURL, username, password, location, progressBarTest, count);                        
                     }
-                    lblCurrentTrack.Text = "Downloading Complete. Total: " + queue.Length.ToString() + " tracks.";
+                    lblCurrentTrack.Text = "Downloading Complete. Total: " + successfullyDownloaded + " out of "+ queue.Length.ToString() + " tracks.";
                 }
                 catch (Exception ex)
                 {
@@ -81,10 +84,11 @@ namespace SubGadgetDownloaderGUI
             }
         }
 
-        public void downloadTrack(string downloadURL, string username, string password, string location, ProgressBar trackProgressBar)
+        public void downloadTrack(string downloadURL, string username, string password, string location, ProgressBar trackProgressBar, int count)
         {
             try
             {
+                cancelDownload = false;
                 string fileName;
                 byte[] bBuffer = new byte[4096];
                 int iBytesRead = 0;                
@@ -112,7 +116,7 @@ namespace SubGadgetDownloaderGUI
                     {
                         trackProgressBar.Maximum = Convert.ToInt32(response.ContentLength);
                         trackProgressBar.Value = 0;
-                        using (FileStream FileStreamer = new FileStream(location + "\\" + fileName, System.IO.FileMode.Create))
+                        using (FileStreamer = new FileStream(location + "\\" + fileName, System.IO.FileMode.Create))
                         {
                             do
                             {
@@ -121,21 +125,37 @@ namespace SubGadgetDownloaderGUI
                                 if (trackProgressBar.Value + iBytesRead <= trackProgressBar.Maximum)
                                 {
                                     trackProgressBar.Value += iBytesRead;
+                                    //Application.DoEvents() is a poor choice here but it's a quick solution
                                     Application.DoEvents();
+                                    if (cancelDownload)
+                                    {                                        
+                                        FileStreamer.Close();
+                                        File.Delete(FileStreamer.Name);
+                                        break;
+                                    }
                                 }
                                 else
                                 {
-                                    trackProgressBar.Value = trackProgressBar.Maximum;
+                                    trackProgressBar.Value = trackProgressBar.Maximum;                                    
                                 }
                             }
                             while (iBytesRead != 0);
+                            if (cancelDownload)
+                            {
+                                lstTracks.Items[count - 1].SubItems[1].Text = "Cancelled";
+                            }
+                            else
+                            {
+                                lstTracks.Items[count - 1].SubItems[1].Text = "Complete";
+                                successfullyDownloaded++;
+                            }
                         }
                     }
                 }
              }
              catch (Exception ex)
              {
-                 
+                 //MessageBox.Show(ex.ToString());
              }
         }
         public static void checkVersion(double currentVersion, LinkLabel updateLabel, Label versionLabel)
@@ -189,6 +209,16 @@ namespace SubGadgetDownloaderGUI
         {
             e.Cancel = true;
             e.NewWidth = lstTracks.Columns[e.ColumnIndex].Width;
+        }
+
+        private void btnCancelDownload_Click(object sender, EventArgs e)
+        {
+            cancelDownload = true;
+        }
+
+        private void downloaderForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            cancelDownload = true;
         }
 
         

@@ -35,15 +35,15 @@
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.lblSaveTo = new System.Windows.Forms.Label();
-            this.lblVersion = new System.Windows.Forms.Label();
             this.lblTrackCountStatus = new System.Windows.Forms.Label();
+            this.btnCancelDownload = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // progressBarTest
             // 
             this.progressBarTest.Location = new System.Drawing.Point(12, 24);
             this.progressBarTest.Name = "progressBarTest";
-            this.progressBarTest.Size = new System.Drawing.Size(403, 23);
+            this.progressBarTest.Size = new System.Drawing.Size(377, 23);
             this.progressBarTest.TabIndex = 0;
             // 
             // lblCurrentTrack
@@ -87,14 +87,6 @@
             this.lblSaveTo.Size = new System.Drawing.Size(0, 13);
             this.lblSaveTo.TabIndex = 8;
             // 
-            // lblVersion
-            // 
-            this.lblVersion.AutoSize = true;
-            this.lblVersion.Location = new System.Drawing.Point(396, 244);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(0, 13);
-            this.lblVersion.TabIndex = 9;
-            // 
             // lblTrackCountStatus
             // 
             this.lblTrackCountStatus.AutoSize = true;
@@ -103,13 +95,23 @@
             this.lblTrackCountStatus.Size = new System.Drawing.Size(0, 13);
             this.lblTrackCountStatus.TabIndex = 10;
             // 
+            // btnCancelDownload
+            // 
+            this.btnCancelDownload.Location = new System.Drawing.Point(396, 24);
+            this.btnCancelDownload.Name = "btnCancelDownload";
+            this.btnCancelDownload.Size = new System.Drawing.Size(19, 23);
+            this.btnCancelDownload.TabIndex = 11;
+            this.btnCancelDownload.Text = "X";
+            this.btnCancelDownload.UseVisualStyleBackColor = true;
+            this.btnCancelDownload.Click += new System.EventHandler(this.btnCancelDownload_Click);
+            // 
             // downloaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(427, 263);
+            this.Controls.Add(this.btnCancelDownload);
             this.Controls.Add(this.lblTrackCountStatus);
-            this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.lblSaveTo);
             this.Controls.Add(this.lstTracks);
             this.Controls.Add(this.lblCurrentTrack);
@@ -118,9 +120,10 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "downloaderForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "SubGadgetDownloader GUI";
+            this.Text = "SubGadgetDownloader GUI v1.0";
             this.Load += new System.EventHandler(this.downloaderForm_Load);
             this.Shown += new System.EventHandler(this.downloaderForm_Shown);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.downloaderForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -134,8 +137,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Label lblSaveTo;
-        private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.Label lblTrackCountStatus;
+        private System.Windows.Forms.Button btnCancelDownload;
     }
 }
 
