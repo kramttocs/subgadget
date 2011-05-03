@@ -38,6 +38,7 @@
             this.lblTrackCountStatus = new System.Windows.Forms.Label();
             this.btnCancelDownload = new System.Windows.Forms.Button();
             this.lnkSaveTo = new System.Windows.Forms.LinkLabel();
+            this.btnRemove = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // progressBarTest
@@ -73,7 +74,7 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Track";
-            this.columnHeader1.Width = 272;
+            this.columnHeader1.Width = 271;
             // 
             // columnHeader2
             // 
@@ -116,11 +117,22 @@
             this.lnkSaveTo.TabIndex = 12;
             this.lnkSaveTo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSaveTo_LinkClicked);
             // 
+            // btnRemove
+            // 
+            this.btnRemove.Location = new System.Drawing.Point(360, 244);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(55, 23);
+            this.btnRemove.TabIndex = 13;
+            this.btnRemove.Text = "Remove";
+            this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            // 
             // downloaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(427, 263);
+            this.ClientSize = new System.Drawing.Size(427, 269);
+            this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.lnkSaveTo);
             this.Controls.Add(this.btnCancelDownload);
             this.Controls.Add(this.lblTrackCountStatus);
@@ -132,7 +144,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "downloaderForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "SubGadgetDownloader GUI v1.0";
+            this.Text = "SubGadgetDownloader GUI v1.1";
             this.Load += new System.EventHandler(this.downloaderForm_Load);
             this.Shown += new System.EventHandler(this.downloaderForm_Shown);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.downloaderForm_FormClosing);
@@ -152,6 +164,7 @@
         private System.Windows.Forms.Label lblTrackCountStatus;
         private System.Windows.Forms.Button btnCancelDownload;
         private System.Windows.Forms.LinkLabel lnkSaveTo;
+        private System.Windows.Forms.Button btnRemove;
     }
 }
 
