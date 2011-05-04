@@ -61,6 +61,7 @@
             this.lstTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
+            this.lstTracks.FullRowSelect = true;
             this.lstTracks.GridLines = true;
             this.lstTracks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lstTracks.Location = new System.Drawing.Point(12, 53);
@@ -119,11 +120,11 @@
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(360, 244);
+            this.btnRemove.Location = new System.Drawing.Point(321, 244);
             this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(55, 23);
+            this.btnRemove.Size = new System.Drawing.Size(94, 23);
             this.btnRemove.TabIndex = 13;
-            this.btnRemove.Text = "Remove";
+            this.btnRemove.Text = "Remove\\Restore";
             this.btnRemove.UseVisualStyleBackColor = true;
             this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 

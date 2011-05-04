@@ -64,18 +64,7 @@ namespace SubGadgetDownloaderGUI
                         locationTemp = locationTemp.Substring(0, 47) + "...";
                     }
                     lnkSaveTo.Text = locationTemp;
-                    int count = 0;
-                    foreach (string downloadURL in queue)
-                    {
-                        count++;
-                        lblTrackCountStatus.Text = count + "/" + queue.Count.ToString();
-                        //lstTracks.EnsureVisible(count - 1);
-                        if (lstTracks.Items[count - 1].SubItems[1].Text != "Removed")
-                        {
-                            lstTracks.Items[count - 1].SubItems[1].Text = "Downloading...";
-                            downloadTrack(downloadURL, username, password, location, progressBarTest, count);
-                        }
-                    }
+                    processQueue(queue, username, password);
                     lblCurrentTrack.Text = "Downloading Complete. Total: " + successfullyDownloaded + " out of "+ queue.Count.ToString() + " tracks.";
                     progressBarTest.Value = 0;
                 }
@@ -89,6 +78,39 @@ namespace SubGadgetDownloaderGUI
 
                 Application.Exit();
             }
+        }
+
+        public void processQueue(ArrayList theQueue, string uname, string pword)
+        {
+            int count = 0;
+            foreach (string downloadURL in theQueue)
+            {
+                count++;
+                lblTrackCountStatus.Text = count + "/" + theQueue.Count.ToString();
+                //lstTracks.EnsureVisible(count - 1);
+                if (lstTracks.Items[count - 1].SubItems[1].Text == "Waiting...")
+                {
+                    lstTracks.Items[count - 1].SubItems[1].Text = "Downloading...";
+                    downloadTrack(downloadURL, uname, pword, location, progressBarTest, count);
+                }
+            }
+            if (revisitQueue())
+            {
+                processQueue(theQueue, uname, pword);
+            }
+        }
+
+        public bool revisitQueue()
+        {
+            bool goAgain = false;
+            for (int i = 0; i < lstTracks.Items.Count; i++)
+            {
+                if (lstTracks.Items[i].Selected && (lstTracks.Items[i].SubItems[1].Text == "Waiting..."))
+                {
+                    goAgain = true;
+                }               
+            }
+            return goAgain;
         }
 
         public void downloadTrack(string downloadURL, string username, string password, string location, ProgressBar trackProgressBar, int count)
@@ -243,9 +265,13 @@ namespace SubGadgetDownloaderGUI
         {            
             for (int i = 0; i < lstTracks.Items.Count; i++)
             {
-                if (lstTracks.Items[i].Selected && (lstTracks.Items[i].SubItems[1].Text != "Downloading..."))
+                if (lstTracks.Items[i].Selected && (lstTracks.Items[i].SubItems[1].Text == "Waiting..."))
                 {                    
                     lstTracks.Items[i].SubItems[1].Text = "Removed";
+                }
+                else if (lstTracks.Items[i].Selected && (lstTracks.Items[i].SubItems[1].Text != "Downloading...") && (lstTracks.Items[i].SubItems[1].Text != "Complete"))
+                {                    
+                    lstTracks.Items[i].SubItems[1].Text = "Waiting...";
                 }
             }
         }
