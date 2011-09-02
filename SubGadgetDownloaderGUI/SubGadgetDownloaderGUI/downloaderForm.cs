@@ -36,7 +36,7 @@ namespace SubGadgetDownloaderGUI
         private void downloaderForm_Shown(object sender, EventArgs e)
         {            
             string[] args = Environment.GetCommandLineArgs();
-            if (args.Length == 5)
+            if (args.Length == 6)
             {
                 try
                 {
@@ -44,6 +44,11 @@ namespace SubGadgetDownloaderGUI
                     string password = args[2];
                     string filePath = args[3];
                     location = args[4];
+                    bool isPlaylistDownload = false;
+                    if(args[6].Equals("1"))
+                    {
+                        isPlaylistDownload = true;
+                    }
                     XmlDocument doc = new XmlDocument();
                     doc.Load(filePath);
                     XmlNodeList nodeList = doc.SelectNodes("SubGadgetDownloader/tracks/track/id");
